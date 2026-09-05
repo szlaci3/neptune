@@ -1,0 +1,6 @@
+[submodule "knowledge/cole-medin-knowledge-base"]
+	path = knowledge/cole-medin-knowledge-base
+	url = https://github.com/coleam00/cole-medin-knowledge-base.git
+[submodule "knowledge/laci-knowledge-base"]
+	path = knowledge/laci-knowledge-base
+	url = https://github.com/szlaci3/laci-knowledge-base.git
