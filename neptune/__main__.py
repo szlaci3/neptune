@@ -6,12 +6,12 @@ import json
 import os
 from pathlib import Path
 import re
-import shutil
 import sqlite3
 import subprocess
 import sys
 
 from .store import ROOT, Store, StoreError
+from .launcher import find_codex
 from tiger.core import TigerError, build_index, retrieve_packet
 
 
@@ -44,7 +44,9 @@ def runtime_config_args() -> list[str]:
     # Preserve Git metadata as read-only under the writable Laci submodule.
     filesystem += ',' + json.dumps((writes[1] / '.git').as_posix()) + '="read"'
     profile = 'permissions.neptune-runtime={extends=":read-only",filesystem={' + filesystem + '},network={enabled=false}}'
-    return ['-c', profile, '-c', 'default_permissions="neptune-runtime"', '-c', 'web_search="disabled"']
+    return ['-c', profile, '-c', 'default_permissions="neptune-runtime"', '-c', 'web_search="disabled"',
+            # A disabled entry still needs a transport when no user entry exists.
+            '-c', 'mcp_servers.node_repl={enabled=false,command="node_repl"}']
 
 
 def runtime_command(executable: str) -> list[str]:
@@ -75,6 +77,7 @@ def main() -> int:
     d.add_argument('--deck')
     launch = commands.add_parser('start', help='Start interactive Codex with restricted write roots')
     launch.add_argument('--show-command', action='store_true')
+    launch.add_argument('--codex', help='Explicit Codex executable path (overrides automatic discovery)')
     args = parser.parse_args()
     store = Store()
     try:
@@ -99,9 +102,7 @@ def main() -> int:
         elif args.command == 'due':
             result = store.due(args.deck)
         elif args.command == 'start':
-            executable = shutil.which('codex')
-            if not executable:
-                raise StoreError('Codex CLI is not installed or not on PATH')
+            executable = find_codex(args.codex)
             command = runtime_command(executable)
             if args.show_command:
                 result = {'argv': command}

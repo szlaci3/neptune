@@ -20,11 +20,19 @@ python -X utf8 -m neptune setup
 python -X utf8 -m neptune start
 ```
 
+The launcher checks PATH, then the Windows Codex desktop installation. You do not
+need to modify PATH when using that installation. To select a specific executable,
+use `python -m neptune start --codex 'C:/path/to/codex.exe'` or set
+`NEPTUNE_CODEX_PATH`. Use `start --show-command` to inspect discovery without starting
+a model session.
+
 `setup` builds disposable search indexes without model calls or sample personal data.
 `start` opens native interactive Codex with Neptune's skill and permission profile.
 It inherits your model choice and authentication. Writes are limited to runtime
 working space, Laci, and generated data; Cole and code remain read-only. Shell network
 access and web search are disabled. Codex handles its own model communication.
+The launcher also disables the inherited `node_repl` MCP server for this session;
+Neptune's Python tools do not require it. Your global Codex configuration is unchanged.
 
 In the Codex desktop app, open Neptune and start a fresh task with “Operate as Neptune
 using the neptune-assistant skill.” The app's chosen permissions control access; the
