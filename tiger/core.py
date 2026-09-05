@@ -210,6 +210,10 @@ def build_index(corpus: Path = DEFAULT_CORPUS, index: Path = DEFAULT_INDEX) -> d
         connection.execute("INSERT INTO build_info VALUES (?, ?)", ("corpus", str(corpus)))
         connection.execute("INSERT INTO build_info VALUES (?, ?)", ("format", "tiger-1"))
         connection.commit()
+    except BaseException:
+        connection.close()
+        temporary.unlink(missing_ok=True)
+        raise
     finally:
         connection.close()
     temporary.replace(index)
@@ -284,7 +288,7 @@ def _valid_video_url(url: str, video_id: str) -> bool:
         return False
     host = parsed.netloc.lower()
     if host in {"youtube.com", "www.youtube.com", "m.youtube.com"}:
-        return parse_qs(parsed.query).get("v", [None])[0] == video_id
+        return parsed.path == "/watch" and parse_qs(parsed.query).get("v") == [video_id]
     return host == "youtu.be" and parsed.path.strip("/") == video_id
 
 

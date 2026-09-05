@@ -140,6 +140,14 @@ class TigerPacketTests(unittest.TestCase):
         with self.assertRaisesRegex(TigerError, "limit must be"):
             retrieve_packet("chunking", DEFAULT_CORPUS, self.index, limit=9)
 
+    def test_rejects_index_from_another_corpus(self) -> None:
+        with self.assertRaisesRegex(TigerError, 'different corpus'):
+            retrieve_packet('chunking', self.work / 'different-corpus', self.index)
+
+    def test_cannot_build_generated_data_inside_read_only_corpus(self) -> None:
+        with self.assertRaisesRegex(TigerError, 'outside the read-only corpus'):
+            build_index(DEFAULT_CORPUS, DEFAULT_CORPUS / 'forbidden-index.sqlite')
+
     def test_deleted_index_only_requires_a_rebuild(self) -> None:
         rebuilt = self.work / "rebuilt.sqlite"
         build_index(DEFAULT_CORPUS, rebuilt)

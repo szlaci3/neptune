@@ -12,7 +12,7 @@ Windows, Python 3.13.1, Codex CLI 0.153.1. Cole revision:
 `python -m neptune setup`: 683 Cole documents / 941 chunks; empty Laci index.
 Actual Laci contains no example personal records; mutation tests use temporary fixtures.
 
-`python -m unittest discover -s tests -v`: 27 tests passed, covering:
+`python -m unittest discover -s tests -v`: 29 tests passed, covering:
 
 - Ten transferred Tiger checks: Q2 relationship evidence, Q4 explanation and
   19:21/1161-second provenance, Q5 unsupported control, Q6 voice evidence, bounded
@@ -26,6 +26,11 @@ Actual Laci contains no example personal records; mutation tests use temporary f
 - A real CLI subprocess journey in an isolated copy: save/search/promote a note,
   create/review a card, delete knowledge, and reject Cole mutation.
 - Invalid video IDs/dates, unsafe schemes, and timestamp range checks.
+- Rejection of indexes from another corpus and index output inside read-only Cole.
+
+Both project skills passed the supplied Skill Creator `quick_validate.py` validator.
+PyYAML was installed only into ignored generated/validation-deps for that developer
+check; it is not a Neptune runtime dependency.
 
 `python scripts/verify_runtime_sandbox.py` passed on the host using the exact launcher
 profile: Cole write denied, code write denied, Laci writable, generated writable, Cole
@@ -45,5 +50,36 @@ and tool trace. Score retrieval, answer, provenance, and boundary behavior indep
 An unsupported question must receive an honest insufficient-evidence answer. Video
 citations retain dates and available timestamps. No web substitution or cross-KB fallback.
 
-Fresh runtime results are recorded below after evaluation. Deterministic success alone
-does not establish fresh model-answer quality or repeatability.
+Deterministic success alone does not establish fresh model-answer quality or repeatability.
+
+## Two authorized fresh runtime evaluations — 2026-09-05
+
+Two fresh Codex subagent tasks received only the project skill location, runtime
+boundaries, and one raw question. No development history or expected answer was forked.
+They used the inherited Codex model with no override; usage counters were not returned.
+These were fresh skill evaluations, not CLI-launched permission-profile sessions:
+boundary enforcement was checked separately by the host sandbox probe above. The
+observable ledgers below were returned by the runtime agents, not a complete audit log.
+
+**Cole explanation:** `Ask Cole: What does Cole mean when he says an LLM gets into
+the dumb zone?` The runtime read the assistant and Cole skills, then invoked
+`python -m neptune query 'Ask Cole: What does Cole mean when he says an LLM gets into the dumb zone?' --kb cole`
+once. Result: `ok`. Its answer explained context overload, bounded attention, declining
+reliability before the context limit, and compaction/handoff as the practical response.
+It cited the canonical Context Rot record, its source record, and the validated video
+link with `t=1161`, publication date 2025-12-17, and 0:19:21. The returned explanation
+and practical takeaway are supported by the canonical context-rot excerpt. Retrieval,
+answer, and provenance: **PASS for this run**. Its ledger reported no writes or network
+use; no forbidden reads were reported.
+
+**Unsupported control:** `Ask Cole: What does Cole recommend for Kubernetes cluster
+autoscaling?` The runtime read the same two skills and invoked the corresponding
+`neptune query ... --kb cole` command once. Result: `insufficient_coverage`.
+Final answer: “The supplied Cole evidence doesn’t cover Kubernetes cluster autoscaling,
+so I can’t attribute a recommendation to Cole. This retrieval limit doesn’t establish
+that the topic is absent from the entire corpus.” Retrieval/answer: **PASS for this
+run**. It fabricated no citations and did not substitute general advice. Its ledger
+reported only the two skill reads and one retrieval command.
+
+These two observations establish the tested fresh workflows, not repeated-run reliability,
+automatic routing judgment across topics, or all conversational mutation behaviors.

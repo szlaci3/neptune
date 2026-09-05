@@ -99,6 +99,8 @@ class Store:
         if metadata.get('status') not in {'active', 'archived'}:
             raise StoreError('status must be active or archived')
         for key in ('Date', 'created', 'updated', 'due'):
+            if key in ('created', 'updated') and key not in metadata:
+                raise StoreError(f'{key} is required')
             if key in metadata:
                 try:
                     date.fromisoformat(metadata[key])
