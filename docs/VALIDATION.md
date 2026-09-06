@@ -4,6 +4,9 @@ Retrieval, final-answer quality, provenance, and boundary enforcement are separa
 claims. Research-1 informs the methodology; its historical model results are not new
 Neptune runtime passes.
 
+The separate [token-efficiency report](TOKEN-EFFICIENCY-TEST.md) records a user-performed
+five-question workload comparison. It preserves reported usage and startup figures.
+
 ## Acceptance checks — 2026-09-05
 
 Windows, Python 3.13.1, Codex CLI 0.153.1. Cole revision:
