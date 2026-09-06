@@ -72,7 +72,7 @@ It checks actual access without writing Cole or application-code bytes.
 See [architecture](docs/ARCHITECTURE.md), [validation](docs/VALIDATION.md), the
 [record workflow](.agents/skills/neptune-assistant/references/records.md), and the
 [Laci schema](knowledge/laci-knowledge-base/SCHEMA.md). The
-[token-efficiency report](docs/TOKEN-EFFICIENCY-TEST.md) records the user's five-question
+[token-efficiency report](docs/TOKEN-EFFICIENCY-REPORT.md) records the user's five-question
 usage comparison, startup figures, and limits of the available measurements.
 
 Research-1 supplied Tiger and regression cases. Saturn supplied capability requirements.

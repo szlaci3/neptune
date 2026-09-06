@@ -4,7 +4,7 @@ Retrieval, final-answer quality, provenance, and boundary enforcement are separa
 claims. Research-1 informs the methodology; its historical model results are not new
 Neptune runtime passes.
 
-The separate [token-efficiency report](TOKEN-EFFICIENCY-TEST.md) records a user-performed
+The separate [token-efficiency report](TOKEN-EFFICIENCY-REPORT.md) records a user-performed
 five-question workload comparison. It preserves reported usage and startup figures.
 
 ## Acceptance checks — 2026-09-05
@@ -15,7 +15,7 @@ Windows, Python 3.13.1, Codex CLI 0.153.1. Cole revision:
 `python -m neptune setup`: 683 Cole documents / 941 chunks; empty Laci index.
 Actual Laci contains no example personal records; mutation tests use temporary fixtures.
 
-`python -m unittest discover -s tests -v`: 29 tests passed, covering:
+`python -m unittest discover -s tests -v`: 32 tests passed, covering:
 
 - Ten transferred Tiger checks: Q2 relationship evidence, Q4 explanation and
   19:21/1161-second provenance, Q5 unsupported control, Q6 voice evidence, bounded
