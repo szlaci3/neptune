@@ -1,7 +1,7 @@
 # Neptune
 
 Neptune is a personal assistant operated by **Codex**, with two local knowledge
-bases, notes, and flashcards. Codex is the runtime: no Pi dependency, second agent
+bases, notes, and flashcards. Codex is the runtime: no second agent
 loop, model API wrapper, or background service.
 
 Cole contains AI engineering knowledge. Laci holds your explicitly saved personal
@@ -35,9 +35,9 @@ The launcher also disables the inherited `node_repl` MCP server for this session
 Neptune's Python tools do not require it. Your global Codex configuration is unchanged.
 
 In the Codex desktop app, open Neptune and start a fresh task with “Operate as Neptune
-using the neptune-assistant skill.” The app's chosen permissions control access; the
+using the neptune-assistant skill.” Access is controled by the desktop app's chosen permissions. The
 CLI launcher's enforced profile is not automatically applied to desktop tasks. Use
-the launcher when you need the tested write boundary.
+the CLI launcher when you need the tested write boundary.
 
 ## Try it
 
@@ -53,7 +53,7 @@ Author, Date, and Context are optional. Saves require your command or approval;
 ambiguous edits require identifying the intended record. Edits preserve record paths,
 and stale revisions are rejected. Notes are searchable Laci records, archive hides
 them without deletion, and promotion changes type in place. Flashcards have named
-decks and a transparent daily review schedule, stored locally without mobile sync.
+decks and a transparent daily review schedule, stored locally.
 
 ## Tools and verification
 
@@ -74,8 +74,3 @@ See [architecture](docs/ARCHITECTURE.md), [validation](docs/VALIDATION.md), the
 [Laci schema](knowledge/laci-knowledge-base/SCHEMA.md). The
 [token-efficiency report](docs/TOKEN-EFFICIENCY-REPORT.md) records the user's five-question
 usage comparison, startup figures, and limits of the available measurements.
-
-Research-1 supplied Tiger and regression cases. Saturn supplied capability requirements.
-Both reference projects remain unchanged. Mobile hosting and dedicated voice/replay
-storage are outside the user-confirmed priority. Existing Codex voice and coding
-features remain host capabilities, not separately implemented Neptune features.
