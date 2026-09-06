@@ -15,6 +15,3 @@ do not bypass revision checks by directly editing runtime records.
 Keep implementation plans and TODO tracking in the task, never repository files.
 Documentation describes implemented behavior, usage, and verified limitations.
 Do not publish, push, or commit private Laci records as a side effect of runtime use.
-
-Browser Use is unavailable in this environment. Explain that immediately if asked
-to perform in-browser user actions.
