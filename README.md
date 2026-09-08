@@ -7,6 +7,112 @@ loop, model API wrapper, or background service.
 Cole contains AI engineering knowledge. Laci holds your explicitly saved personal
 knowledge, notes, and study cards. Ask naturally in a dedicated Neptune task.
 
+## Why I built it
+
+I wanted a personal knowledge system between what I can remember and everything
+available online: a place for information I trust, which I can grow and query through
+conversation. Neptune brings knowledge retrieval, note capture, and study into one
+workflow, with Markdown records in the OKF format and explicit sources for answers.
+
+## A question in practice
+
+You do not need to remember a concept's exact name. In this example, I asked:
+
+> Talk about the 5 levels of users, for example Dark factory making is the ultimate level.
+
+Codex clarified the topic into a query about AI-assisted software development,
+called Neptune's Cole retrieval tool, and used the returned evidence to explain
+levels 0–5 with source links. The reformulation retained “five”; the evidence
+supplied the Level 0 baseline as well.
+
+![A natural-language question and part of Neptune's answer in Codex](docs/images/knowledge-query-example.png)
+
+The screenshot shows part of the response. The full answer follows; local source
+links have been adapted for this repository. This example illustrates the workflow,
+not a guarantee that every ambiguous question will be resolved correctly.
+
+<details>
+<summary>Read the full example answer</summary>
+
+You’re referring to the **levels of AI coding autonomy**, where **Level 5 is the “Dark Factory.”** Cole describes Dan Shapiro’s framework using a self-driving-car analogy: each level hands more responsibility to the AI. There’s also a Level 0 baseline.
+
+| Level | AI’s role | How you work |
+|---|---|---|
+| **0 — Spicy autocomplete** | Suggests code and answers questions. | You write the code and make the decisions. |
+| **1 — Coding intern** | Handles small, clearly defined tasks and boilerplate. | You delegate little pieces and closely check the results. |
+| **2 — Junior developer** | Implements more substantial code with guidance. | You pair with it, correct mistakes, and stay involved throughout. |
+| **3 — The developer** | Handles implementation from an agreed plan. | You participate in planning and validation, while the AI writes the code. |
+| **4 — Engineering team** | Works through larger specifications autonomously, potentially overnight. | You define the work and review the finished changes before they ship. |
+| **5 — Dark Factory** | Plans, implements, validates, and ships without human review. | You define the mission, constraints, and acceptance criteria, and engineer the system that enforces them. |
+
+This breakdown comes from Cole’s [source record, “Overview”](https://github.com/coleam00/cole-medin-knowledge-base/blob/eba5e31bc628280c546d4828491051c308d550dc/sources/the-best-ai-coding-setup-isnt-the-most-autonomous-one-heres-why.md) and [video explanation](https://www.youtube.com/watch?v=muwRbfuKbR4) (published 2026-07-03).
+
+The biggest distinction between **Level 4 and Level 5 is who authorizes shipping**. At Level 4, an AI can work for hours independently, but a human still reviews its output. At Level 5, the system’s own validation decides whether the change reaches production.
+
+A Dark Factory therefore needs much more than a powerful coding agent: clear operating rules, repeatable workflows, independent validation, deployment controls, and regression testing. In Cole’s experiment, a separate validation agent receives the user journey and code changes without the implementation conversation, helping it judge the result independently. See the [Dark Factory source record](https://github.com/coleam00/cole-medin-knowledge-base/blob/eba5e31bc628280c546d4828491051c308d550dc/sources/im-building-an-ai-dark-factory-that-ships-its-own-code-public-experiment.md) and [experiment video](https://www.youtube.com/watch?v=6woc6ii-zoE) (published 2026-04-15).
+
+**“Ultimate” describes autonomy, rather than guaranteed quality.** Cole’s practical recommendation in the framework video is to establish a reliable Level 3 workflow before pushing higher. My interpretation is that the progression changes your job: you move from writing code, to directing implementation, to designing the system that decides whether the work is good enough to ship.
+
+</details>
+
+## How it works
+
+1. **Interpret the request.** Codex uses the project skills to select Cole or Laci
+   and formulate the tool call. Explicit knowledge-base choices take precedence.
+2. **Retrieve evidence.** For Cole, the Tiger Python adapter searches a local SQLite
+   FTS index and returns a bounded packet of canonical Markdown excerpts and source
+   metadata. The retrieval code makes no model calls.
+3. **Answer with sources.** Codex synthesizes the packet under instructions to use
+   supported claims, cite records and videos, and acknowledge insufficient evidence.
+   Video links use supplied timestamps when available.
+
+Laci adds conversational saving, editing, notes, and flashcards. Its mutation tools
+use revision checks and atomic file replacement; saved records remain readable Markdown.
+See the [architecture](docs/ARCHITECTURE.md) for boundaries and implementation details.
+
+## What I designed and evaluated
+
+I defined the user workflows, architected the Tiger retrieval approach, and used
+coding agents to implement it. I reviewed code and documentation throughout, ran
+practical tests, and developed token-accounting scripts to compare approaches.
+
+Earlier prototypes explored separate runtime LLMs, local and hosted models, Pi,
+and n8n. Those experiments helped me choose Codex as the conversational runtime
+and keep retrieval and persistence in deterministic tools. User experience also
+shaped capture: I preferred flexible conversation over a document interview with
+repeated item approvals and a final batch-save step.
+
+In my **five-question comparison**, Neptune used **59.6K reported tokens versus
+83.4K for direct Codex knowledge-base access: approximately 28.5% fewer**. The
+comparison used the same reported model/effort setting. These are results for that
+workload, calculated from rounded usage totals; see the
+[token-efficiency report](docs/TOKEN-EFFICIENCY-REPORT.md) for questions and accounting.
+
+Quality was evaluated separately. The [validation record](docs/VALIDATION.md)
+documents deterministic tests and two fresh runtime examples: a supported answer
+with timestamped provenance and an unsupported question answered with an explicit
+evidence limitation. Those observations do not establish general answer reliability.
+
+### Explore the implementation
+
+| Area | Code or instructions |
+|---|---|
+| Bounded retrieval and provenance | [Tiger adapter](tiger/core.py) |
+| Routing and conversational behavior | [Assistant skill](.agents/skills/neptune-assistant/SKILL.md) |
+| Evidence and citation rules | [Cole skill](.agents/skills/neptune-cole/SKILL.md) |
+| Record persistence and revision checks | [Record store](neptune/store.py) |
+| Retrieval regression checks | [Tiger tests](tests/test_tiger.py) |
+
+## Current scope
+
+Neptune is a personal project, operated locally through Codex. Cole retrieval uses
+lexical search, so relevance and evidence coverage have limits. Instructions guide
+answer grounding; they do not make hallucinations impossible. The CLI launcher's
+tested permission boundary is distinct from a desktop task's selected permissions.
+There is no hosted service or mobile synchronization. Setup needs access to both
+knowledge submodules; a public application repository alone does not supply private
+personal knowledge. Cole's content is maintained by its upstream author.
+
 ## Start
 
 Requirements: Python 3.11+ with SQLite FTS5, an installed/authenticated Codex CLI,
@@ -35,7 +141,7 @@ The launcher also disables the inherited `node_repl` MCP server for this session
 Neptune's Python tools do not require it. Your global Codex configuration is unchanged.
 
 In the Codex desktop app, open Neptune and start a fresh task with “Operate as Neptune
-using the neptune-assistant skill.” Access is controled by the desktop app's chosen permissions. The
+using the neptune-assistant skill.” Access is controlled by the desktop app's chosen permissions. The
 CLI launcher's enforced profile is not automatically applied to desktop tasks. Use
 the CLI launcher when you need the tested write boundary.
 
