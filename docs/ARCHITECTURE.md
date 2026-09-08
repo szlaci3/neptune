@@ -10,11 +10,13 @@ native interactive Codex. Native integration uses [skills](https://learn.chatgpt
 and [permission profiles](https://learn.chatgpt.com/docs/permissions).
 
 The launcher extends `:read-only`, adding write permission only to runtime/, Laci,
-and generated/. Laci's .git metadata remains read-only. Approval escalation is disabled.
+and generated/. Laci's .git metadata remains read-only. Approval escalation is disabled: 
+`--ask-for-approval` is set to `never`, so it simply fails at operations beyond permissions.
 Cole and code remain read-only. A differently configured desktop task does not inherit
 these guarantees. Shell network access and web search are disabled; Codex retains its
-own model transport. This profile does not independently constrain user-installed
-external connector tools; runtime instructions use local Neptune tools only.
+own model transport, so there is network access but only for Codex to use OpenAI’s model service.
+This profile does not independently constrain user-installed external connector tools; runtime 
+instructions use local Neptune tools only.
 
 ## Routing and grounding
 
