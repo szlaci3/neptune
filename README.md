@@ -110,8 +110,9 @@ lexical search, so relevance and evidence coverage have limits. Instructions gui
 answer grounding; they do not make hallucinations impossible. The CLI launcher's
 tested permission boundary is distinct from a desktop task's selected permissions.
 There is no hosted service or mobile synchronization. Setup needs access to both
-knowledge submodules; a public application repository alone does not supply private
-personal knowledge. Cole's content is maintained by its upstream author.
+knowledge submodules. Availability of the personal Laci knowledge base may change;
+if it becomes private, cloning it will require access. Cole's content is maintained
+by its upstream author.
 
 ## Start
 
@@ -119,7 +120,20 @@ Requirements: Python 3.11+ with SQLite FTS5, an installed/authenticated Codex CL
 and both knowledge submodules checked out. The tools use Python's standard library
 only. This build was checked with Python 3.13.1 and Codex CLI 0.153.1.
 
-From this directory:
+Clone Neptune with both knowledge bases, then enter the project directory:
+
+```powershell
+git clone --recurse-submodules https://github.com/szlaci3/neptune.git
+cd neptune
+```
+
+If you already cloned Neptune without its submodules, run this from the project directory:
+
+```powershell
+git submodule update --init --recursive
+```
+
+Then build the indexes and start Neptune:
 
 ```powershell
 python -X utf8 -m neptune setup
